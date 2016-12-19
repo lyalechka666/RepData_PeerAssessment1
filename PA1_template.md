@@ -57,6 +57,7 @@ Median1 <- median(SumStepsPerDay$steps)
 Mean1
 Median1
 ```
+![plot of chunk unnamed-chunk-3](figure/pa_q1.png) 
 
 The mean is `r Mean1` and median is `r Median1`.
 
