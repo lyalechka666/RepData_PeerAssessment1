@@ -59,7 +59,7 @@ Median1
 ```
 ![plot of chunk unnamed-chunk-3](figure/pa_q1.png) 
 
-The mean is `r Mean1` and median is `r Median1`.
+The mean is 10766.19 and median is 10765.
 
 ## What is the average daily activity pattern?
 
@@ -81,7 +81,9 @@ maxIndex
 maxAvgSteps
 maxAvgInt
 ```
-On average across all the days, the 5-minute interval `r maxAvgInt`, contains the maximum number of steps is `r maxAvgSteps`
+
+![plot of chunk unnamed-chunk-3](figure/pa_q2.png) 
+On average across all the days, the 5-minute interval 835, contains the maximum number of steps is 206.1698113
 
 ## Imputing missing values
 
@@ -113,7 +115,10 @@ Median2 <- median(SumStepsPerDay2$steps)
 Mean2
 Median2
 ```
-After imputing the missing values, the mean total number of steps taken per day is `r Mean2`, and the median is `r Median2`. It can be seen that the median has moved closer to the mean.
+
+![plot of chunk unnamed-chunk-3](figure/pa_q3.png) 
+
+After imputing the missing values, the mean total number of steps taken per day is 10766.19, and the median is 10766.19. It can be seen that the median has moved closer to the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -135,4 +140,4 @@ xyplot(steps ~ interval|DayType, data = TotStepsbyDayType,
        xlab="5-Minute Interval", ylab = "Average Number of Steps Taken",
        main="Average Number of Steps by 5-Minute Intervals (Weekdays vs. Weekends)")
 ```
-
+![plot of chunk unnamed-chunk-3](figure/pa_q4.png) 
