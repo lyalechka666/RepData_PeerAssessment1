@@ -1,0 +1,62 @@
+#assume activity.csv to exist in the current directory
+data <- read.csv("activity.csv")
+data <- transform(data, date = as.Date(date, "%Y-%m-%d"))
+dataNoNa <- na.omit(data)
+
+#Question 1: What is mean total number of steps taken per day?
+#Create a histogram of steps per day
+SumStepsPerDay <- aggregate(steps ~ date, dataNoNa, sum)
+hist(SumStepsPerDay$steps, col="blue", xlab="Number of Steps",
+     main="Total Number of Steps Per Day")
+#Calculate mean and median of total steps per day
+Mean <- mean(SumStepsPerDay$steps)
+Median <- median(SumStepsPerDay$steps)
+Mean
+Median
+
+#Question 2: What is the average daily activity pattern?
+#Create a graph of daily acvtivity
+avgSteps <- aggregate(steps ~ interval, dataNoNa, mean)
+plot(avgSteps$interval, avgSteps$steps, type = "l",
+     xlab="5-Minute Interval", ylab = "Average Number of Steps Taken",
+     main="Average Number of Steps by 5-Minute Intervals, Across All Days")
+#Calculate maximum
+maxIndex <- which.max(avgSteps$steps)
+maxAvgSteps <- avgSteps$steps[maxIndex]
+maxAvgInt <- avgSteps$interval[maxIndex]
+maxIndex
+maxAvgSteps
+maxAvgInt
+
+#Question 3: Imputing missing values
+#Counting missing values
+NumNA<-sum(is.na(data))
+NumNA
+#Filling missing values
+total <- merge(data,avgSteps,by="interval")
+total$StepsAdj<-ifelse(is.na(total$steps.x), total$steps.y, total$steps.x)
+dataAdj<-subset(total,select = c(date,interval, StepsAdj))
+dataAdj<-rename(dataAdj, c("StepsAdj"="steps"))
+#Create a histogram of steps per day
+SumStepsPerDay2 <- aggregate(steps ~ date, dataAdj, sum)
+hist(SumStepsPerDay2$steps, col="red", xlab="Number of Steps",
+     main="Total Number of Steps Per Day")
+#Calculate mean and median of total steps per day
+Mean2 <- mean(SumStepsPerDay2$steps)
+Median2 <- median(SumStepsPerDay2$steps)
+Mean2
+Median2
+
+#Question 4: Are there differences in activity patterns between weekdays and weekends?
+#Add Weekday/Weekend indicator of Weekend = 0, Weekday=1
+dataAdj <- transform(dataAdj, DayType = ifelse(weekdays(dataAdj$date) %in% c("Saturday", "Sunday"), "Weekend", "Weekday"))
+dataAdj <- transform(dataAdj, DayType = factor(DayType))
+
+#Create a graph
+TotStepsbyDayType <- aggregate(steps ~ interval + DayType, dataAdj, mean)
+
+library(lattice)
+xyplot(steps ~ interval|DayType, data = TotStepsbyDayType,
+       type = "l", layout = c(1,2),
+       xlab="5-Minute Interval", ylab = "Average Number of Steps Taken",
+       main="Average Number of Steps by 5-Minute Intervals (Weekdays vs. Weekends)")
